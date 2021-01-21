@@ -66,12 +66,62 @@ const tryRandomPromise = (random) => new Promise((resolve, reject) => {
 // console.log(tryRandomPromise(0.3))
 
 
-for (let i=1; i<10; i++) {
-    const random = Math.random();
-    wait(2000 + random*1000)
-        .then(() => tryRandomPromise(random))
-        .then(result => console.log('random try #', random ,i, result))
-        .catch(error => console.error('random try #', random, i, error));
-}
+// for (let i=1; i<10; i++) {
+//     const random = Math.random();
+//     wait(2000 + random*1000)
+//         .then(() => tryRandomPromise(random))
+//         .then(result => console.log('random try #', random ,i, result))
+//         .catch(error => console.error('random try #', random, i, error));
+// }
 
 //Phase 7
+
+
+const tryTryAgain = async (i) => {
+    const random = Math.random();
+    // no need for try-catch if there's no possibility of error (rarely happens)
+    await wait(3000 + random*1000); //always run regardless of random number.
+    // usually you need to wrap the await to gracefully handle the error
+    try {
+        const result = await tryRandomPromise(random); //check if random number is greater than 0.5
+        console.log('random again #', i, result);
+    } catch (error) {
+        console.error('random again #', i, error);
+    }
+};
+
+// for (let i=1; i<10; i++) {
+//     tryTryAgain(i)
+// }
+
+(async function () {
+    for (let i=1; i<10; i++) {
+        await tryTryAgain(i)
+    }
+    console.log('END OF PROGRAM')
+})()
+
+
+// function finalFunc () {
+//     return new Promise ((resolve, reject) => {
+//         resolve(function () {
+//         })
+//     })
+// }
+// finalFunc().then(() => {
+// })
+
+// setTimeout(() => {
+//     console.log('END OF PROGRAM');
+// }, 4000)
+
+//Phase 8
+// random again # 5 random error
+// random again # 6 random error
+// random again # 8 random error
+// random again # 2 random error
+// random again # 4 random error
+// random again # 9 random error
+// random again # 1 success!!!
+// random again # 7 success!!!
+// random again # 3 success!!!
